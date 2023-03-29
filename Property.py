@@ -1,4 +1,5 @@
-import pygame, functions
+import functions
+import pygame
 
 pygame.init()
 
@@ -40,7 +41,7 @@ c4 = (102, 255, 255)
 clock = pygame.time.Clock()
 
 
-class Property():  # creating a class property which will contain all data of properties and their respective functions
+class Property:  # creating a class property which will contain all data of properties and their respective functions
 
     def __init__(self, name, color, country, locx, locy, cost, x1, y1, x2,
                  y2):  # initialising every object(property) with its basic information
@@ -413,6 +414,3 @@ _property = {"delhi": Property("Delhi", red, "India", card_length + card_breadth
                          display_height + gaph + boxb / 2 + 2 * c2gaph + cardl,
                          2 * gapv + boxl + 0.2 * boxl + 4 * cgapv + 3 * cardh)
              }
-
-
-
