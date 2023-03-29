@@ -1,6 +1,7 @@
 import pygame, time
 import functions, Property, player, firstpage
 from player import Player
+from AI.MinMaxPlayer import MinMaxPlayer
 pygame.init()
 
 # initialising all the hard coding values
@@ -28,7 +29,7 @@ grey = (160, 160, 160)
 orange = (228, 142, 88)
 
 # initializing players to board
-player = [Player(blue, '1'), Player(red, '2')]  # creating player objects
+player = [Player(blue, '1'), MinMaxPlayer(red, '2')]  # creating player objects
 
 
 # initialising all the checkpoints used throughout the program
