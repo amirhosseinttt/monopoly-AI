@@ -1,7 +1,12 @@
-import pygame, time
-import functions, Property, player, firstpage
-from player import Player
+import pygame
+
+import Property
+import firstpage
+import functions
+import player
 from AI.MinMaxPlayer import MinMaxPlayer
+from player import Player
+
 pygame.init()
 
 # initialising all the hard coding values
@@ -30,7 +35,6 @@ orange = (228, 142, 88)
 
 # initializing players to board
 player = [Player(blue, '1'), MinMaxPlayer(red, '2')]  # creating player objects
-
 
 # initialising all the checkpoints used throughout the program
 player_index = 0
@@ -663,7 +667,8 @@ def Prop():  # if player lands on a property
             player[Property._property[place].owner].total_wealth += Property._property[place].houses[
                 Property._property[place].no_of_houses]
         functions.text_in_box("You paid rent of %r to player %r?" % (
-        Property._property[place].houses[Property._property[place].no_of_houses], Property._property[place].owner + 1),
+            Property._property[place].houses[Property._property[place].no_of_houses],
+            Property._property[place].owner + 1),
                               __font, orange, display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
         timer -= 1
@@ -988,4 +993,4 @@ def CommChest():  # if player lands on community chest
         timer -= 1
         if timer == 0:
             timer = 8
-            comm = 0            
+            comm = 0
