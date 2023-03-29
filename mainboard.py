@@ -1,7 +1,8 @@
 import pygame, time
 import functions, Property, player, firstpage
-
+from player import Player
 pygame.init()
+
 # initialising all the hard coding values
 display_width = 1430
 display_height = 800
@@ -25,6 +26,11 @@ llblue = (0, 160, 160)
 maroon = (100, 10, 100)
 grey = (160, 160, 160)
 orange = (228, 142, 88)
+
+# initializing players to board
+player = [Player(blue, '1'), Player(red, '2')]  # creating player objects
+
+
 # initialising all the checkpoints used throughout the program
 player_index = 0
 rollonce = 0
@@ -163,45 +169,45 @@ def drawing():
     Property.sproperty["rail4"].locmaker()
     _font_ = pygame.font.Font('freesansbold.ttf', 50)
     # checking if someone reached winning amount
-    if player.player[0].total_wealth >= firstpage.p[0].winamount or player.player[1].total_wealth >= firstpage.p[
+    if player[0].total_wealth >= firstpage.p[0].winamount or player[1].total_wealth >= firstpage.p[
         0].winamount:
         rollonce = 1
         endturn = 1
 
-        if player.player[0].total_wealth >= firstpage.p[0].winamount:
+        if player[0].total_wealth >= firstpage.p[0].winamount:
             functions.gameDisplay.fill(black)
             functions.text_in_box("%r Won...Congratulations!!!" % firstpage.p[0].name, _font_, orange, card_length,
                                   (display_height / 2 + card_length) / 2 + 1.25 * blockh,
                                   display_height - 2 * card_length,
                                   display_height / 2 - ((display_height / 2 + card_length) / 2 + 1.25 * blockh))
 
-        if player.player[1].total_wealth >= firstpage.p[0].winamount:
+        if player[1].total_wealth >= firstpage.p[0].winamount:
             functions.gameDisplay.fill(black)
             functions.text_in_box("%r Won...Congratulations!!!" % firstpage.p[1].name, _font_, orange, card_length,
                                   (display_height / 2 + card_length) / 2 + 1.25 * blockh,
                                   display_height - 2 * card_length,
                                   display_height / 2 - ((display_height / 2 + card_length) / 2 + 1.25 * blockh))
 
-    if player.player[0].total_wealth <= 0:
+    if player[0].total_wealth <= 0:
         functions.gameDisplay.fill(black)
         functions.text_in_box("%r Won...Congratulations!!!" % firstpage.p[1].name, _font_, orange, card_length,
                               (display_height / 2 + card_length) / 2 + 1.25 * blockh, display_height - 2 * card_length,
                               display_height / 2 - ((display_height / 2 + card_length) / 2 + 1.25 * blockh))
 
-    if player.player[1].total_wealth <= 0:
+    if player[1].total_wealth <= 0:
         functions.gameDisplay.fill(black)
         functions.text_in_box("%r Won...Congratulations!!!" % firstpage.p[0].name, _font_, orange, card_length,
                               (display_height / 2 + card_length) / 2 + 1.25 * blockh, display_height - 2 * card_length,
                               display_height / 2 - ((display_height / 2 + card_length) / 2 + 1.25 * blockh))
     # checking if someone cash <=0
-    if player.player[player_index].cash < 0:
+    if player[player_index].cash < 0:
         functions.text_in_box("%r ,You are lack of cash, sell your properties/houses" % firstpage.p[player_index].name,
                               _font, orange, card_length, (display_height / 2 + card_length) / 2 + 1.25 * blockh,
                               display_height - 2 * card_length,
                               display_height / 2 - ((display_height / 2 + card_length) / 2 + 1.25 * blockh))
         risk = 1
         endturn = 1
-    if risk == 1 and player.player[player_index].cash > 0:
+    if risk == 1 and player[player_index].cash > 0:
         endturn = 0
 
     if round_complete == 1:
@@ -209,8 +215,8 @@ def drawing():
                               (display_height / 2 + card_length) / 2 + 1.25 * blockh, display_height - 2 * card_length,
                               display_height / 2 - ((display_height / 2 + card_length) / 2 + 1.25 * blockh))
         if timerr == 8:
-            player.player[player_index].cash += 20000
-            player.player[player_index].total_wealth += 20000
+            player[player_index].cash += 20000
+            player[player_index].total_wealth += 20000
             cround[player_index] -= 40
         timerr -= 1
         if timerr == 0:
@@ -233,13 +239,13 @@ def drawing():
 
     if incometax == 1:
         if key == 0:
-            player.player[player_index].total_wealth = 0.9 * player.player[player_index].total_wealth
-            player.player[player_index].cash = 0.9 * (player.player[player_index].total_wealth * 10 / 9)
+            player[player_index].total_wealth = 0.9 * player[player_index].total_wealth
+            player[player_index].cash = 0.9 * (player[player_index].total_wealth * 10 / 9)
             key = 2
         if key == 2:
             timer -= 1
             functions.text_in_box(
-                "You paid income tax of %r" % (0.1 * (player.player[player_index].total_wealth * 10 / 9)), __font,
+                "You paid income tax of %r" % (0.1 * (player[player_index].total_wealth * 10 / 9)), __font,
                 orange, display_height / 2, display_height / 2, display_height / 2 - card_length,
                 display_height / 2 - card_length)
             if timer == 0:
@@ -248,8 +254,8 @@ def drawing():
                 key = 1
     elif incometax == 2:
         if key == 0:
-            player.player[player_index].total_wealth -= 30000
-            player.player[player_index].cash -= 30000
+            player[player_index].total_wealth -= 30000
+            player[player_index].cash -= 30000
             key = 2
         if key == 2:
             timer -= 1
@@ -260,8 +266,8 @@ def drawing():
                 incometax = 0
                 timer = 8
                 key = 1
-    player.player[1].draw()
-    player.player[0].draw()
+    player[1].draw()
+    player[0].draw()
     # sketching the players boxes
     for item, tempo in Property._property.items():
         Property._property[item].squares()
@@ -284,14 +290,14 @@ def drawing():
         GoToJail()
 
     functions.text_in_box(firstpage.p[0].name, _font, maroon, display_height + gaph, gapv, boxb, 0.1 * boxl)
-    functions.text_in_box("Cash %r" % player.player[0].cash, _font, maroon, display_height + gaph, gapv + 0.1 * boxl,
+    functions.text_in_box("Cash %r" % player[0].cash, _font, maroon, display_height + gaph, gapv + 0.1 * boxl,
                           boxb, 0.1 * boxl)
-    functions.text_in_box("Net Worth %r" % player.player[0].total_wealth, _font, maroon, display_height + gaph,
+    functions.text_in_box("Net Worth %r" % player[0].total_wealth, _font, maroon, display_height + gaph,
                           gapv + 0.9 * boxl, boxb, 0.1 * boxl)
     functions.text_in_box(firstpage.p[1].name, _font, maroon, display_height + gaph, 2 * gapv + boxl, boxb, 0.1 * boxl)
-    functions.text_in_box("Cash %r" % player.player[1].cash, _font, maroon, display_height + gaph,
+    functions.text_in_box("Cash %r" % player[1].cash, _font, maroon, display_height + gaph,
                           2 * gapv + boxl + 0.1 * boxl, boxb, 0.1 * boxl)
-    functions.text_in_box("Net Worth %r" % player.player[1].total_wealth, _font, maroon, display_height + gaph,
+    functions.text_in_box("Net Worth %r" % player[1].total_wealth, _font, maroon, display_height + gaph,
                           2 * gapv + boxl + 0.9 * boxl, boxb, 0.1 * boxl)
 
     # avoid flickering
@@ -309,20 +315,20 @@ def Button(msg, x, y, l, h, ac, ic, function, tc):  # for drawing buttons
         pygame.draw.rect(functions.gameDisplay, ac, [x, y, l, h])
         if click[0] == 1:  # checking if pressed
             if function == "roll":
-                if gotojail == 0 and player.player[
+                if gotojail == 0 and player[
                     player_index].released == 1 and rollonce == 0:  # diff working done based on the button pressed
                     n = functions.rolldice()
 
                     cround[player_index] += n
-                    player.player[player_index].movement(n)
+                    player[player_index].movement(n)
                     rollonce = 1
 
                     working()
 
-                if gotojail == 1 and player.player[player_index].released == 0 and key == 3 and rolloncejail == 0:
+                if gotojail == 1 and player[player_index].released == 0 and key == 3 and rolloncejail == 0:
                     n = functions.rolldice()
                     if functions.a == functions.b:
-                        player.player[player_index].released = 1
+                        player[player_index].released = 1
                     rolloncejail = 1
                     key = 4
                     endturn = 0
@@ -332,7 +338,7 @@ def Button(msg, x, y, l, h, ac, ic, function, tc):  # for drawing buttons
                     player_index += 1
                 elif player_index == 1:
                     player_index -= 1
-                if player.player[player_index].released == 0:
+                if player[player_index].released == 0:
                     gotojail = 1
                 rollonce = 0
                 card_display = 0
@@ -344,23 +350,23 @@ def Button(msg, x, y, l, h, ac, ic, function, tc):  # for drawing buttons
                 timerr = 8
 
             if function == "yes":
-                player.player[player_index].cash -= Property._property[place].cost
+                player[player_index].cash -= Property._property[place].cost
                 Property._property[place].owner = player_index
-                player.player[player_index].properties.append(place)
+                player[player_index].properties.append(place)
 
                 key = 2
 
             if function == "Yes":
-                player.player[player_index].cash -= Property.sproperty[place].cost
+                player[player_index].cash -= Property.sproperty[place].cost
                 Property.sproperty[place].owner = player_index
 
                 key = 2
 
             if function == "YeS":
-                player.player[player_index].cash -= Property.sproperty[place].cost
+                player[player_index].cash -= Property.sproperty[place].cost
                 Property.sproperty[place].owner = player_index
 
-                player.player[player_index].no_of_railways += 1
+                player[player_index].no_of_railways += 1
                 key = 2
 
             if function == "no":
@@ -378,9 +384,9 @@ def Button(msg, x, y, l, h, ac, ic, function, tc):  # for drawing buttons
                             break
                 if vvalid == 1:
                     Property.temo.owner = None
-                    player.player[player_index].cash += Property.temo.mortgage
-                    player.player[player_index].total_wealth += Property.temo.mortgage
-                    player.player[player_index].total_wealth -= Property.temo.cost
+                    player[player_index].cash += Property.temo.mortgage
+                    player[player_index].total_wealth += Property.temo.mortgage
+                    player[player_index].total_wealth -= Property.temo.cost
 
             if function == "build":
                 valid = 1
@@ -394,7 +400,7 @@ def Button(msg, x, y, l, h, ac, ic, function, tc):  # for drawing buttons
                             break
                 if valid == 1:
                     Property.temo.no_of_houses += 1
-                    player.player[player_index].cash -= Property.temo.cost
+                    player[player_index].cash -= Property.temo.cost
             if function == "sell":
                 valid = 1
                 if Property.temo.owner != player_index or Property.temo.no_of_houses == 0:
@@ -407,15 +413,15 @@ def Button(msg, x, y, l, h, ac, ic, function, tc):  # for drawing buttons
                             break
                 if valida == 1:
                     Property.temo.no_of_houses -= 1
-                    player.player[player_index].cash += 0.5 * Property.temo.cost
+                    player[player_index].cash += 0.5 * Property.temo.cost
             if function == "roll_for_double":
                 key = 3
                 rolloncejail = 0
             if function == "pay":
                 key = 5
-                player.player[player_index].cash -= 5000
-                player.player[player_index].total_wealth -= 5000
-                player.player[player_index].released = 1
+                player[player_index].cash -= 5000
+                player[player_index].total_wealth -= 5000
+                player[player_index].released = 1
                 endturn = 0
 
     _font = pygame.font.Font('freesansbold.ttf', 20)
@@ -429,72 +435,72 @@ def working():  # decides which checkpoints to on based on the players current p
         round_complete = 1
 
     for tplace, tempo in Property._property.items():
-        if Property._property[tplace].locx == player.player[player_index].posx and Property._property[tplace].locy == \
-                player.player[player_index].posy:
+        if Property._property[tplace].locx == player[player_index].posx and Property._property[tplace].locy == \
+                player[player_index].posy:
             card_display = 1
             key = 0
             place = tplace
-    if (player.player[player_index].posx == card_length + 2.5 * card_breadth and display_height - card_length / 2 ==
-        player.player[player_index].posy) or (
-            player.player[player_index].posx == card_length + 1.5 * card_breadth and card_length / 2 == player.player[
+    if (player[player_index].posx == card_length + 2.5 * card_breadth and display_height - card_length / 2 ==
+        player[player_index].posy) or (
+            player[player_index].posx == card_length + 1.5 * card_breadth and card_length / 2 == player[
         player_index].posy) or (
-            player.player[player_index].posx == display_height - card_length / 2 and card_length + 5.5 * card_breadth ==
-            player.player[player_index].posy):
+            player[player_index].posx == display_height - card_length / 2 and card_length + 5.5 * card_breadth ==
+            player[player_index].posy):
         chance = 1
-    if (player.player[player_index].posx == card_length + 7.5 * card_breadth and display_height - card_length / 2 ==
-        player.player[player_index].posy) or (
-            player.player[player_index].posx == card_length / 2 and card_length + 2.5 * card_breadth == player.player[
+    if (player[player_index].posx == card_length + 7.5 * card_breadth and display_height - card_length / 2 ==
+        player[player_index].posy) or (
+            player[player_index].posx == card_length / 2 and card_length + 2.5 * card_breadth == player[
         player_index].posy) or (
-            player.player[player_index].posx == display_height - card_length / 2 and card_length + 2.5 * card_breadth ==
-            player.player[player_index].posy):
+            player[player_index].posx == display_height - card_length / 2 and card_length + 2.5 * card_breadth ==
+            player[player_index].posy):
         comm = 1
 
-    if (player.player[player_index].posx == Property.sproperty["electric"].locx and Property.sproperty[
-        "electric"].locy == player.player[player_index].posy) or (
-            player.player[player_index].posx == Property.sproperty["water"].locx and Property.sproperty["water"].locy ==
-            player.player[player_index].posy):
-        if player.player[player_index].posx == Property.sproperty["electric"].locx:
+    if (player[player_index].posx == Property.sproperty["electric"].locx and Property.sproperty[
+        "electric"].locy == player[player_index].posy) or (
+            player[player_index].posx == Property.sproperty["water"].locx and Property.sproperty["water"].locy ==
+            player[player_index].posy):
+        if player[player_index].posx == Property.sproperty["electric"].locx:
             place = "electric"
-        elif player.player[player_index].posx == Property.sproperty["water"].locy:
+        elif player[player_index].posx == Property.sproperty["water"].locy:
             place = "water"
         spcard_display = 1
         key = 0
 
-    if (player.player[player_index].posx == Property.sproperty["rail1"].locx and Property.sproperty["rail1"].locy ==
-        player.player[player_index].posy) or (
-            player.player[player_index].posx == Property.sproperty["rail2"].locx and Property.sproperty["rail2"].locy ==
-            player.player[player_index].posy) or (
-            player.player[player_index].posx == Property.sproperty["rail3"].locx and Property.sproperty["rail3"].locy ==
-            player.player[player_index].posy) or (
-            player.player[player_index].posx == Property.sproperty["rail4"].locx and Property.sproperty["rail4"].locy ==
-            player.player[player_index].posy):
-        if (player.player[player_index].posx == Property.sproperty["rail1"].locx and Property.sproperty["rail1"].locy ==
-                player.player[player_index].posy):
+    if (player[player_index].posx == Property.sproperty["rail1"].locx and Property.sproperty["rail1"].locy ==
+        player[player_index].posy) or (
+            player[player_index].posx == Property.sproperty["rail2"].locx and Property.sproperty["rail2"].locy ==
+            player[player_index].posy) or (
+            player[player_index].posx == Property.sproperty["rail3"].locx and Property.sproperty["rail3"].locy ==
+            player[player_index].posy) or (
+            player[player_index].posx == Property.sproperty["rail4"].locx and Property.sproperty["rail4"].locy ==
+            player[player_index].posy):
+        if (player[player_index].posx == Property.sproperty["rail1"].locx and Property.sproperty["rail1"].locy ==
+                player[player_index].posy):
             place = "rail1"
-        elif (player.player[player_index].posx == Property.sproperty["rail2"].locx and Property.sproperty[
-            "rail2"].locy == player.player[player_index].posy):
+        elif (player[player_index].posx == Property.sproperty["rail2"].locx and Property.sproperty[
+            "rail2"].locy == player[player_index].posy):
             place = "rail2"
-        elif (player.player[player_index].posx == Property.sproperty["rail3"].locx and Property.sproperty[
-            "rail3"].locy == player.player[player_index].posy):
+        elif (player[player_index].posx == Property.sproperty["rail3"].locx and Property.sproperty[
+            "rail3"].locy == player[player_index].posy):
             place = "rail3"
-        elif (player.player[player_index].posx == Property.sproperty["rail4"].locx and Property.sproperty[
-            "rail4"].locy == player.player[player_index].posy):
+        elif (player[player_index].posx == Property.sproperty["rail4"].locx and Property.sproperty[
+            "rail4"].locy == player[player_index].posy):
             place = "rail4"
         railway = 1
         key = 0
 
-    if player.player[player_index].posx == (card_length + 5 * card_breadth + 0.5 * card_breadth) and player.player[
+    if player[player_index].posx == (card_length + 5 * card_breadth + 0.5 * card_breadth) and player[
         player_index].posy == (display_height - card_length / 2):
         incometax = 1
         key = 0
-    if player.player[player_index].posx == display_height - card_length / 2 and player.player[
+    if player[player_index].posx == display_height - card_length / 2 and player[
         player_index].posy == 7 * card_breadth + card_length + 0.5 * card_breadth:
         incometax = 2
         key = 0
-    if player.player[player_index].posx == display_height - card_length / 2 and player.player[
+    if player[player_index].posx == display_height - card_length / 2 and player[
         player_index].posy == card_length / 2:
-        player.player[player_index].posx = card_length / 2
-        player.player[player_index].posy = display_height - card_length / 2
+        player[player_index].posx = card_length / 2
+        player[player_index].posy = display_height - card_length / 2
         cround[player_index] -= 20
         gotojail = 1
         key = 0
@@ -508,18 +514,18 @@ def railways():  # respectve changes on screen if railways if concersnesd
         Property.sproperty[place].rcard()
 
         if timer == 8:
-            if player.player[Property.sproperty[place].owner].no_of_railways == 1:
+            if player[Property.sproperty[place].owner].no_of_railways == 1:
                 rent = 2500
-            if player.player[Property.sproperty[place].owner].no_of_railways == 2:
+            if player[Property.sproperty[place].owner].no_of_railways == 2:
                 rent = 5000
-            if player.player[Property.sproperty[place].owner].no_of_railways == 3:
+            if player[Property.sproperty[place].owner].no_of_railways == 3:
                 rent = 10000
-            if player.player[Property.sproperty[place].owner].no_of_railways == 4:
+            if player[Property.sproperty[place].owner].no_of_railways == 4:
                 rent = 20000
-            player.player[player_index].cash -= rent
-            player.player[player_index].total_wealth -= rent
-            player.player[Property.sproperty[place].owner].cash += rent
-            player.player[Property.sproperty[place].owner].total_wealth += rent
+            player[player_index].cash -= rent
+            player[player_index].total_wealth -= rent
+            player[Property.sproperty[place].owner].cash += rent
+            player[Property.sproperty[place].owner].total_wealth += rent
         functions.text_in_box("You paid rent of %r to player %r?" % (rent, Property.sproperty[place].owner + 1), __font,
                               orange, display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -559,10 +565,10 @@ def spcard_displayy():  # if playaer lands on utillies then the work happening o
                 rent = 3000 * dice_sum
             else:
                 rent = 1000 * dice_sum
-            player.player[player_index].cash -= rent
-            player.player[player_index].total_wealth -= rent
-            player.player[Property.sproperty[place].owner].cash += rent
-            player.player[Property.sproperty[place].owner].total_wealth += rent
+            player[player_index].cash -= rent
+            player[player_index].total_wealth -= rent
+            player[Property.sproperty[place].owner].cash += rent
+            player[Property.sproperty[place].owner].total_wealth += rent
         functions.text_in_box("You paid rent of %r to player %r?" % (rent, Property.sproperty[place].owner + 1), __font,
                               orange, display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -593,7 +599,7 @@ def spcard_displayy():  # if playaer lands on utillies then the work happening o
 def GoToJail():  # if the player lands on gotojail
     global key, timer, incometax, gotojail, round_complete, cround, rent, railway, temporary
     if temporary == 1:
-        player.player[player_index].released = 0
+        player[player_index].released = 0
         temporary = 0
     if key == 0:
         timer -= 2
@@ -614,7 +620,7 @@ def GoToJail():  # if the player lands on gotojail
         functions.text_in_box("Roll your dice once", __font, orange, card_length,
                               (display_height / 2 + card_length) / 2 + 1.25 * blockh, display_height - 2 * card_length,
                               display_height / 2 - ((display_height / 2 + card_length) / 2 + 1.25 * blockh))
-    if key == 4 and player.player[player_index].released == 1:
+    if key == 4 and player[player_index].released == 1:
         timer -= 2
         functions.text_in_box("Lucky Guy! You are released!", __font, orange, card_length,
                               (display_height / 2 + card_length) / 2 + 1.25 * blockh, display_height - 2 * card_length,
@@ -623,7 +629,7 @@ def GoToJail():  # if the player lands on gotojail
             key = 1
             gotojail = 0
             timer = 8
-    if key == 4 and player.player[player_index].released == 0:
+    if key == 4 and player[player_index].released == 0:
         timer -= 2
         functions.text_in_box("Better Luck next time!", __font, orange, card_length,
                               (display_height / 2 + card_length) / 2 + 1.25 * blockh, display_height - 2 * card_length,
@@ -648,12 +654,12 @@ def Prop():  # if player lands on a property
     if Property._property[place].owner != None and key == 0 and player_index != Property._property[place].owner:
         Property._property[place].card()
         if timer == 8:
-            player.player[player_index].cash -= Property._property[place].houses[Property._property[place].no_of_houses]
-            player.player[player_index].total_wealth -= Property._property[place].houses[
+            player[player_index].cash -= Property._property[place].houses[Property._property[place].no_of_houses]
+            player[player_index].total_wealth -= Property._property[place].houses[
                 Property._property[place].no_of_houses]
-            player.player[Property._property[place].owner].cash += Property._property[place].houses[
+            player[Property._property[place].owner].cash += Property._property[place].houses[
                 Property._property[place].no_of_houses]
-            player.player[Property._property[place].owner].total_wealth += Property._property[place].houses[
+            player[Property._property[place].owner].total_wealth += Property._property[place].houses[
                 Property._property[place].no_of_houses]
         functions.text_in_box("You paid rent of %r to player %r?" % (
         Property._property[place].houses[Property._property[place].no_of_houses], Property._property[place].owner + 1),
@@ -688,8 +694,8 @@ def Chance():  # if player lands on chance
     n = functions.a + functions.b
     if n == 2:
         if timer == 8:
-            player.player[player_index].posx = display_height - card_length / 2
-            player.player[player_index].posy = display_height - card_length / 2
+            player[player_index].posx = display_height - card_length / 2
+            player[player_index].posy = display_height - card_length / 2
             cround[player_index] = 40
             round_complete = 1
         functions.text_in_box("Go to our prime location GO and collect your reward money ;)", __font, orange,
@@ -703,8 +709,8 @@ def Chance():  # if player lands on chance
     if n == 3:
         timer -= 1
         if timer == 0:
-            player.player[player_index].posx = card_length + card_breadth / 2
-            player.player[player_index].posy = display_height - card_length / 2
+            player[player_index].posx = card_length + card_breadth / 2
+            player[player_index].posy = display_height - card_length / 2
             if cround[player_index] > 9:
                 cround[player_index] = 49
                 round_complete = 1
@@ -720,8 +726,8 @@ def Chance():  # if player lands on chance
             working()
     if n == 4:
         if timer == 8:
-            player.player[player_index].cash -= 10000
-            player.player[player_index].total_wealth -= 10000
+            player[player_index].cash -= 10000
+            player[player_index].total_wealth -= 10000
         functions.text_in_box("Oops! You broke the window of Mr. William's Car,Pay him $10000", __font, orange,
                               display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -731,8 +737,8 @@ def Chance():  # if player lands on chance
             chance = 0
     if n == 5:
         if timer == 8:
-            player.player[player_index].posx = display_height - card_length / 2
-            player.player[player_index].posy = card_length / 2
+            player[player_index].posx = display_height - card_length / 2
+            player[player_index].posy = card_length / 2
 
             cround[player_index] = 30
 
@@ -747,7 +753,7 @@ def Chance():  # if player lands on chance
     if n == 6:
         timer -= 1
         if timer == 0:
-            player.player[player_index].movement(37)
+            player[player_index].movement(37)
             cround[player_index] = cround[player_index] % 40
 
         functions.text_in_box("Earthquake expected! Go back three spaces", __font, orange, display_height / 2,
@@ -759,8 +765,8 @@ def Chance():  # if player lands on chance
             working()
     if n == 7:
         if timer == 8:
-            player.player[player_index].cash -= 30000
-            player.player[player_index].total_wealth -= 30000
+            player[player_index].cash -= 30000
+            player[player_index].total_wealth -= 30000
         functions.text_in_box("Its you birthday,Now give party to your friends...cost $30000", __font, orange,
                               display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -770,8 +776,8 @@ def Chance():  # if player lands on chance
             chance = 0
     if n == 8:
         if timer == 8:
-            player.player[player_index].cash += 40000
-            player.player[player_index].total_wealth += 40000
+            player[player_index].cash += 40000
+            player[player_index].total_wealth += 40000
         functions.text_in_box("Congo! You won lottery prize of $40000", __font, orange, display_height / 2,
                               display_height / 2, display_height / 2 - card_length, display_height / 2 - card_length)
         timer -= 1
@@ -781,8 +787,8 @@ def Chance():  # if player lands on chance
     if n == 9:
         timer -= 2
         if timer == 0:
-            player.player[player_index].posx = card_length + card_breadth / 2
-            player.player[player_index].posy = card_length / 2
+            player[player_index].posx = card_length + card_breadth / 2
+            player[player_index].posy = card_length / 2
             if cround[player_index] > 21:
                 cround[player_index] = 61
                 round_complete = 1
@@ -800,8 +806,8 @@ def Chance():  # if player lands on chance
     if n == 10:
         timer -= 2
         if timer == 0:
-            player.player[player_index].posx = card_length / 2
-            player.player[player_index].posy = display_height - card_length - 1.5 * card_breadth
+            player[player_index].posx = card_length / 2
+            player[player_index].posy = display_height - card_length - 1.5 * card_breadth
 
         functions.text_in_box("Go to Electric Company and feel the shock!", __font, orange, display_height / 2,
                               display_height / 2, display_height / 2 - card_length, display_height / 2 - card_length)
@@ -812,8 +818,8 @@ def Chance():  # if player lands on chance
             working()
     if n == 11:
         if timer == 8:
-            player.player[player_index].cash += 30000
-            player.player[player_index].total_wealth += 30000
+            player[player_index].cash += 30000
+            player[player_index].total_wealth += 30000
         functions.text_in_box("You won the first prize as a hotel manager, collect $30000", __font, orange,
                               display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -823,8 +829,8 @@ def Chance():  # if player lands on chance
             chance = 0
     if n == 12:
         if timer == 8:
-            player.player[player_index].cash -= 20000
-            player.player[player_index].total_wealth -= 20000
+            player[player_index].cash -= 20000
+            player[player_index].total_wealth -= 20000
         functions.text_in_box("Smoking kills! clear your bills , pay $20000", __font, orange, display_height / 2,
                               display_height / 2, display_height / 2 - card_length, display_height / 2 - card_length)
         timer -= 1
@@ -838,8 +844,8 @@ def CommChest():  # if player lands on community chest
     n = functions.a + functions.b
     if n == 2:
         if timer == 8:
-            player.player[player_index].posx = display_height - card_length / 2
-            player.player[player_index].posy = display_height - card_length / 2
+            player[player_index].posx = display_height - card_length / 2
+            player[player_index].posy = display_height - card_length / 2
             cround[player_index] = 40
             round_complete = 1
         functions.text_in_box("Go to our prime location GO and collect your reward money ;)", __font, orange,
@@ -853,8 +859,8 @@ def CommChest():  # if player lands on community chest
     if n == 3:
         timer -= 2
         if timer == 0:
-            player.player[player_index].posx = card_length + card_breadth / 2
-            player.player[player_index].posy = display_height - card_length / 2
+            player[player_index].posx = card_length + card_breadth / 2
+            player[player_index].posy = display_height - card_length / 2
             if cround[player_index] > 9:
                 cround[player_index] = 49
                 round_complete = 1
@@ -870,8 +876,8 @@ def CommChest():  # if player lands on community chest
             working()
     if n == 4:
         if timer == 8:
-            player.player[player_index].cash -= 10000
-            player.player[player_index].total_wealth -= 10000
+            player[player_index].cash -= 10000
+            player[player_index].total_wealth -= 10000
         functions.text_in_box("Oops! You broke the window of Mr. William's Car,Pay him $10000", __font, orange,
                               display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -882,8 +888,8 @@ def CommChest():  # if player lands on community chest
     if n == 5:
         timer -= 2
         if timer == 0:
-            player.player[player_index].posx = display_height - card_length / 2
-            player.player[player_index].posy = card_length / 2
+            player[player_index].posx = display_height - card_length / 2
+            player[player_index].posy = card_length / 2
 
             cround[player_index] = 30
 
@@ -898,7 +904,7 @@ def CommChest():  # if player lands on community chest
     if n == 6:
         timer -= 2
         if timer == 0:
-            player.player[player_index].movement(37)
+            player[player_index].movement(37)
             cround[player_index] = cround[player_index] % 40
 
         functions.text_in_box("Earthquake expected! Go back three spaces", __font, orange, display_height / 2,
@@ -910,8 +916,8 @@ def CommChest():  # if player lands on community chest
             working()
     if n == 7:
         if timer == 8:
-            player.player[player_index].cash -= 30000
-            player.player[player_index].total_wealth -= 30000
+            player[player_index].cash -= 30000
+            player[player_index].total_wealth -= 30000
         functions.text_in_box("Its you birthday,Now give party to your friends...cost $30000", __font, orange,
                               display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -921,8 +927,8 @@ def CommChest():  # if player lands on community chest
             comm = 0
     if n == 8:
         if timer == 8:
-            player.player[player_index].cash += 40000
-            player.player[player_index].total_wealth += 40000
+            player[player_index].cash += 40000
+            player[player_index].total_wealth += 40000
         functions.text_in_box("Congo! You won lottery prize of $40000", __font, orange, display_height / 2,
                               display_height / 2, display_height / 2 - card_length, display_height / 2 - card_length)
         timer -= 1
@@ -932,8 +938,8 @@ def CommChest():  # if player lands on community chest
     if n == 9:
         timer -= 2
         if timer == 0:
-            player.player[player_index].posx = card_length + card_breadth / 2
-            player.player[player_index].posy = card_length / 2
+            player[player_index].posx = card_length + card_breadth / 2
+            player[player_index].posy = card_length / 2
             if cround[player_index] > 21:
                 cround[player_index] = 61
                 round_complete = 1
@@ -951,8 +957,8 @@ def CommChest():  # if player lands on community chest
     if n == 10:
         timer -= 2
         if timer == 0:
-            player.player[player_index].posx = card_length / 2
-            player.player[player_index].posy = display_height - card_length - 1.5 * card_breadth
+            player[player_index].posx = card_length / 2
+            player[player_index].posy = display_height - card_length - 1.5 * card_breadth
 
         functions.text_in_box("Go to Electric Company and feel the shock!", __font, orange, display_height / 2,
                               display_height / 2, display_height / 2 - card_length, display_height / 2 - card_length)
@@ -963,8 +969,8 @@ def CommChest():  # if player lands on community chest
             working()
     if n == 11:
         if timer == 8:
-            player.player[player_index].cash += 30000
-            player.player[player_index].total_wealth += 30000
+            player[player_index].cash += 30000
+            player[player_index].total_wealth += 30000
         functions.text_in_box("You won the first prize as a hotel manager, collect $30000", __font, orange,
                               display_height / 2, display_height / 2, display_height / 2 - card_length,
                               display_height / 2 - card_length)
@@ -974,8 +980,8 @@ def CommChest():  # if player lands on community chest
             comm = 0
     if n == 12:
         if timer == 8:
-            player.player[player_index].cash -= 20000
-            player.player[player_index].total_wealth -= 20000
+            player[player_index].cash -= 20000
+            player[player_index].total_wealth -= 20000
         functions.text_in_box("Smoking kills! clear your bills , pay $20000", __font, orange, display_height / 2,
                               display_height / 2, display_height / 2 - card_length, display_height / 2 - card_length)
         timer -= 1

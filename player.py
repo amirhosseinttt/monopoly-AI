@@ -76,6 +76,3 @@ class Player:
             elif self.posx == card_length / 2 and self.posy == card_length + card_breadth / 2:
                 self.posy -= (card_breadth + card_length) / 2
             n -= 1
-
-
-player = [Player(blue, '1'), Player(red, '2')]  # creating player objects
