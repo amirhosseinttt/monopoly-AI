@@ -1,3 +1,7 @@
+gameplay based on: https://github.com/AniketSanghi/Monopoly-game
+
+---
+
 # Monopoly-game
 
 A monopoly game made with python
@@ -17,8 +21,8 @@ This is a basic monopoly game made using pygame and tkinter libraries of python.
 
 # Dependencies:
 
-- Python 3.6
-- Pygame 3.0
+- Python 3.6+
+- Pygame
 - Tkinter
 
 # How To Run:
